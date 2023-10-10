@@ -1,7 +1,12 @@
 import React from "react";
 import { Row, Col,Card } from "react-bootstrap";
+import {useNavigate} from 'react-router-dom'
 
 function LandingPage() {
+  const navigateByUrl=useNavigate()
+  const navigate=()=>{
+    navigateByUrl('/home')
+  }
   return (
     <div>
       <Row className="mt-5 mb-5 align-items-center justify-content-between">
@@ -16,7 +21,7 @@ function LandingPage() {
             obcaecati error iure blanditiis corporis nulla dolor ab repudiandae
             fugit modi illum esse.
           </p>
-          <button className="btn btn-info mt-5 fw-bolder">Get Started</button>
+          <button onClick={navigate} className="btn btn-info mt-5 fw-bolder">Get Started</button>
         </Col>
         <Col> </Col>
         <Col className="ps-5" lg={6}>
