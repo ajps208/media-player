@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { uploadVideo } from "../Services/allAPI";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Add({setUploadVideoServerResponse}) {
   const[video,setVideo]=useState({
@@ -15,16 +17,17 @@ function Add({setUploadVideoServerResponse}) {
     const{id,caption,url,embedlink}=video
     // if video is empty or not
     if(!id||!caption||!url||!embedlink){
-      alert("Please fill the form completely....")
+      toast.warning("Please fill the form completely....")
     }else{
       // api call
       const response=await uploadVideo(video)
       if(response.status>=200 && response.status<300){
         setUploadVideoServerResponse(response.data)
-        alert(`${response.data.caption} video upload successfully`)
+        setVideo({id:"",caption:"",url:"",embedlink:""})
+        toast.success(`${response.data.caption} video upload successfully`)
         handleClose()
       }else{
-        alert("please provide the unique id")
+        toast.error("uploading error...Please wait sometime!!!")
       }
     }
   }
@@ -80,6 +83,7 @@ function Add({setUploadVideoServerResponse}) {
           <Button onClick={handleUpload} variant="primary">Upload</Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer position="top-center" theme="colored" autoClose={2000} />
     </>
   );
 }

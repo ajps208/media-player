@@ -12,6 +12,7 @@ function View(uploadVideoServerResponse) {
 
   }
   useEffect(()=>{
+    setDeleteVideoStaus(false)
     getAllUploadVideos()
   },[uploadVideoServerResponse,deleteVideoStaus])
   console.log(allVideos);

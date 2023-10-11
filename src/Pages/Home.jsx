@@ -13,7 +13,7 @@ function Home() {
       <div className="add">
         <Add setUploadVideoServerResponse={setUploadVideoServerResponse} />
       </div>
-      <Link to={"./watch-history"} style={{textDecoration:"none",color:"white"}} className='fs-5'>Watch History</Link>
+      <Link to={"/watch-history"} style={{textDecoration:"none",color:"white"}} className='fs-5'>Watch History</Link>
     </div>
     <Row className="container-fluid   w-100 ">
       <Col className='all-videos col-lg-8'>
