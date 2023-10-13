@@ -1,8 +1,9 @@
 import React,{useEffect, useState} from 'react'
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addCategory, deleteCategory, getAllCategory } from '../Services/allAPI';
+import { addCategory, deleteCategory, getAVideo, getAllCategory, updateCategory } from '../Services/allAPI';
+import Videocard from './Videocard';
 
 
 function Category() {
@@ -14,7 +15,8 @@ function Category() {
   const handleAddCategory=async()=>{
     if(categoryName){
       const body={
-        categoryName
+        categoryName,allVideos:[]
+
       }
       // make api call
       const response=await addCategory(body)
@@ -44,19 +46,47 @@ function Category() {
   useEffect(()=>{
     handleGetCategory()
   },[])
+  const dragOver=(e)=>{
+    console.log("draging over category");
+    e.preventDefault()
+  }
+  const videoDropped=async(e,categoryId)=>{
+    console.log("inside the categort id:" +categoryId);
+    const videoCardId=e.dataTransfer.getData("cardId")
+    // console.log("video card id:" +videoCardId);
+    // get details of video dropped
+    const {data}=await getAVideo(videoCardId)
+    // console.log(data);
+    // get detailes category
+    const selectedCategory=Allcategory.find(item=>item.id===categoryId)
+    selectedCategory.allVideos.push(data)
+    console.log(selectedCategory);
+    await updateCategory(categoryId,selectedCategory)
+    handleGetCategory()
+
+
+  }
   return (
     <>
     <div className="d-grid">
       <button className="btn btn-info " onClick={handleShow}>Add New Category</button>
     </div>
-    {Allcategory?Allcategory?.map(item=>(
-      <div className='border mt-3 mb-3 p-3 '>
+    {Allcategory.length>0?Allcategory?.map(item=>(
+      <div className='border mt-3 mb-3 p-3 rounded' droppable onDragOver={(e)=>dragOver(e)} onDrop={(e)=>{videoDropped(e,item?.id)}}>
         <div className='rounded d-flex justify-content-between align-items-center'>
           <h6>{item?.categoryName}</h6>
           <button className="btn" onClick={()=>handleDeleteCategory(item?.id)}><i className="fa-solid fa-trash text-danger"></i></button>
         </div>
+        {item?.allVideos&&
+         <Row>{
+          item?.allVideos.map(card=>(
+            <Col sm={12}>
+              <Videocard displayData={card} insideCategory={true}/>
+            </Col>
+          ))}
+          </Row>}
       </div>
-    )):<p className='fw-bolder mt-3 fs-5 text-danger'>Nothing to Display</p>}
+    )):<p className='fw-bolder mt-3 fs-5 text-danger'>No Categories Added</p>}
     <Modal
         show={show}
         onHide={handleClose}

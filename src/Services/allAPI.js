@@ -49,3 +49,14 @@ export const deleteCategory=async(id)=>{
     // call delete http request to http://localhost:categories/videos to remove  a video from json server return responses to categories component
     return await commonAPI("DELETE",`${serverURL}/categories/${id}`)
 }
+// update category to json server
+export const updateCategory=async(id,body)=>{
+    // call put http request to http://localhost:4000/categories/id to get video from json server return responses to categories component
+    return await commonAPI("PUT",`${serverURL}/categories/${id}`,body)
+}
+
+    // delete watch history
+export const deleteHistory=async(id)=>{
+        // call delete http request to http://localhost:history to remove  a history from json server return responses to categories component
+        return await commonAPI("DELETE",`${serverURL}/history/${id}`,{}) 
+    }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getHistory } from '../Services/allAPI'
+import { deleteHistory, getHistory } from '../Services/allAPI'
 
 function WatchHistory() {
   const [history,setHistory] =useState([])
@@ -11,6 +11,11 @@ function WatchHistory() {
   useEffect(()=>{
     getAllWatchHistory()
   },[])
+  const deleteWatchHistory=async(id)=>{
+    await deleteHistory(id)
+    getAllWatchHistory()
+
+  }
   return (
     <>
     <div className="container mt-5 mb-5 d-flex justify-content-between align-items-center">
@@ -26,6 +31,7 @@ function WatchHistory() {
             <th>Caption</th>
             <th>URL</th>
             <th>Time Stamp</th>
+            <th>Action</th>
          </tr>
         </thead>
         <tbody>
@@ -35,6 +41,7 @@ function WatchHistory() {
           <td>{item?.caption}</td>
           <td><a target='_blank' href={item?.embedlink}>{item?.embedlink}</a></td>
           <td>{item?.timeStamp}</td>
+          <td><i className="fa-solid fa-trash text-danger" onClick={()=>{deleteWatchHistory(item?.id)}}></i></td>
        </tr>))
         :<p className='fw-bolder mt-3 text-danger'>Nothing to display!!!!</p>}
         </tbody>

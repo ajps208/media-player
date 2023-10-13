@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { Card, Modal } from 'react-bootstrap'
 import { addHistory, deleteVideo } from '../Services/allAPI';
 
-function Videocard({displayData,setDeleteVideoStaus}) {
+function Videocard({displayData,setDeleteVideoStaus,insideCategory}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -27,14 +27,18 @@ function Videocard({displayData,setDeleteVideoStaus}) {
    setDeleteVideoStaus(true)
 
   }
+  const dragStarted=(e,id)=>{
+    console.log("data transfered");
+    e.dataTransfer.setData("cardid",id)
+  }
   return (
     <>
-      {displayData&&<Card  className='mb-3'>
+      {displayData&&<Card  className='mb-3' draggable onDragStart={(e)=>{dragStarted(e,displayData?.id)}}>
       <Card.Img onClick={handleShow} style={{height:"180px"}} className='w-100' variant="top" src={displayData?.url} />
       <Card.Body>
         <Card.Title className='d-flex justify-content-between align-items-center'>
           <h6>{displayData?.caption}</h6> 
-         <button onClick={()=>removeVideo(displayData?.id)} className='btn'> <i className="fa-solid fa-trash text-danger"></i></button>
+         {insideCategory?"":<button onClick={()=>removeVideo(displayData?.id)} className='btn'> <i className="fa-solid fa-trash text-danger"></i></button>}
           </Card.Title>
        
       </Card.Body>
